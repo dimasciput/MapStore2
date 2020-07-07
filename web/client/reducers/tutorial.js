@@ -45,6 +45,7 @@ function tutorial(state = initialState, action) {
     case INIT_TUTORIAL:
         return assign({}, state, {
             style: action.style,
+            steps: action.steps,
             defaultStep: action.defaultStep,
             checkbox: action.checkbox,
             presetList: action.presetList
