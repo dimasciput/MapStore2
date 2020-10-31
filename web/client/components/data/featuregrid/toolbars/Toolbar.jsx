@@ -23,7 +23,7 @@ const getSaveMessageId = ({saving, saved}) => {
  * @param {bool} showSyncOnMapButton shows / hide the show on map button (defaults to true)
  */
 module.exports = ({ events = {}, syncPopover = { showPopoverSync: true, dockSize: "32.2%" }, mode = "VIEW",
-    showAdvancedFilterButton = true, showSyncOnMapButton = true, showChartButton = true, selectedCount, hasChanges, hasGeometry, hasNewFeatures, isSimpleGeom, isDrawing = false, isEditingAllowed, saving = false, saved = false, isDownloadOpen, isColumnsOpen, disableToolbar, isSearchAllowed, disableDownload, displayDownload, isSyncActive = false, hasSupportedGeometry = true, disableZoomAll = false, isFilterActive = false, showTimeSyncButton = false, timeSync = false} = {}) => {
+    showAdvancedFilterButton = true, showSyncOnMapButton = true, showChartButton = true, selectedCount, hasChanges, hasGeometry, hasNewFeatures, isSimpleGeom, isDrawing = false, isEditingAllowed, saving = false, saved = false, isDownloadOpen, isColumnsOpen, disableToolbar, isSearchAllowed, disableDownload, displayDownload, isSyncActive = false, hasSupportedGeometry = true, disableZoomAll = false, isFilterActive = false, showTimeSyncButton = false, timeSync = false, isIGRACDownloading = false} = {}) => {
     return (<ButtonGroup id="featuregrid-toolbar" className="featuregrid-toolbar featuregrid-toolbar-margin">
         <TButton
             id="edit-mode"
@@ -180,6 +180,15 @@ module.exports = ({ events = {}, syncPopover = { showPopoverSync: true, dockSize
             active={timeSync}
             onClick={() => events.setTimeSync && events.setTimeSync(!timeSync)}
             glyph="time" />
-
+        <TButton
+            id="grid-igrac-download"
+            keyProp="grid-igrac-download"
+            tooltipId="featuregrid.toolbar.downloadIGRACData"
+            disabled={isIGRACDownloading}
+            active={!isIGRACDownloading}
+            visible={selectedCount <= 1 && mode === "VIEW"}
+            onClick={events.downloadIGRACData}
+            loading={isIGRACDownloading}
+            glyph="features-grid-download"/>
     </ButtonGroup>);
 };

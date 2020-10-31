@@ -43,7 +43,9 @@ const {
     LOAD_MORE_FEATURES,
     SET_UP,
     SET_TIME_SYNC,
-    ENABLE_GEOMETRY_FILTER
+    ENABLE_GEOMETRY_FILTER,
+    DOWNLOAD_IGRAC_DATA,
+    FINISH_DOWNLOADING_IGRAC_DATA
 } = require('../actions/featuregrid');
 const {
     FEATURE_TYPE_LOADED,
@@ -396,6 +398,16 @@ function featuregrid(state = emptyResultsState, action) {
     }
     case ENABLE_GEOMETRY_FILTER: {
         return assign({}, state, {geometryFilterEnabled: action.enable});
+    }
+    case DOWNLOAD_IGRAC_DATA: {
+        return assign({}, state, {
+            isIGRACDownloading: true
+        });
+    }
+    case FINISH_DOWNLOADING_IGRAC_DATA: {
+        return assign({}, state, {
+            isIGRACDownloading: false
+        });
     }
     default:
         return state;
