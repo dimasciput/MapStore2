@@ -13,6 +13,7 @@ const { LOCATION_CHANGE } = require('connected-react-router');
 const axios = require('../libs/ajax');
 const bbox = require('@turf/bbox');
 const {fidFilter} = require('../utils/ogc/Filter/filter');
+const {saveAs} = require('file-saver');
 const {getDefaultFeatureProjection, getPagesToLoad} = require('../utils/FeatureGridUtils');
 const {isSimpleGeomType} = require('../utils/MapUtils');
 const assign = require('object-assign');
@@ -38,7 +39,7 @@ const {SORT_BY, CHANGE_PAGE, SAVE_CHANGES, SAVE_SUCCESS, DELETE_SELECTED_FEATURE
     openFeatureGrid, closeFeatureGrid, OPEN_FEATURE_GRID, CLOSE_FEATURE_GRID, CLOSE_FEATURE_GRID_CONFIRM, OPEN_ADVANCED_SEARCH, ZOOM_ALL, UPDATE_FILTER, START_SYNC_WMS,
     STOP_SYNC_WMS, startSyncWMS, storeAdvancedSearchFilter, fatureGridQueryResult, LOAD_MORE_FEATURES, SET_TIME_SYNC,
     updateFilter, selectFeatures, DEACTIVATE_GEOMETRY_FILTER, ACTIVATE_TEMPORARY_CHANGES, disableToolbar, FEATURES_MODIFIED,
-    deactivateGeometryFilter } = require('../actions/featuregrid');
+    deactivateGeometryFilter, DOWNLOAD_IGRAC_DATA, downloadIGRACData, FINISH_DOWNLOADING_IGRAC_DATA, finishDownloadingIGRACData } = require('../actions/featuregrid');
 
 const {TOGGLE_CONTROL, resetControls, setControlProperty, toggleControl} = require('../actions/controls');
 const {queryPanelSelector, showCoordinateEditorSelector, drawerEnabledControlSelector} = require('../selectors/controls');
@@ -901,5 +902,42 @@ module.exports = {
                 && getState().browser.mobile
                 && drawerEnabledControlSelector(getState())
             )
-            .mapTo(toggleControl('drawer', 'enabled'))
+            .mapTo(toggleControl('drawer', 'enabled')),
+    startDownloadingIGRACData: (action$, { getState } = {}) =>
+        action$
+            .ofType(DOWNLOAD_IGRAC_DATA)
+            .switchMap(() => {
+                let data = null;
+                let maxTry = 10;
+                let currentTry = 0;
+                let downloadUrl = '/groundwater/well/download/';
+                const { id } = selectedLayerSelector(getState());
+                const filterObj = get(getState(), `featuregrid.advancedFilters["${id}"]`);
+                const filters = get(getState(), `featuregrid.filters["${id}"]`);
+
+                return Rx.Observable.fromPromise(axios.get(downloadUrl).then( response => response.data.task_id )).flatMap(
+                    taskId => Rx.Observable.interval(2000).flatMap(
+                        () => {
+                            const fileUrl = `/uploaded/gwml2/download/${taskId}.zip`;
+                            return axios.get(fileUrl).then(
+                                function(response) {
+                                    data = 'OK';
+                                    const link = document.createElement('a');
+                                    link.href = fileUrl;
+                                    // Append to html link element page
+                                    document.body.appendChild(link);
+                                    // Start download
+                                    link.click();
+                                    // Clean up and remove the link
+                                    link.parentNode.removeChild(link);
+                                    return data;
+                                }).catch(
+                                function(e) {
+                                    data = null;
+                                    currentTry += 1;
+                                    return null;
+                                });
+                        }).filter(() => data !== null || currentTry > maxTry).take(1).switchMap(() => Rx.Observable.of(finishDownloadingIGRACData()))
+                );
+            })
 };

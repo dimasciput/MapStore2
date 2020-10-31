@@ -50,6 +50,8 @@ const INIT_PLUGIN = 'FEATUREGRID:INIT_PLUGIN';
 const SIZE_CHANGE = 'FEATUREGRID:SIZE_CHANGE';
 const TOGGLE_SHOW_AGAIN_FLAG = 'FEATUREGRID:TOGGLE_SHOW_AGAIN_FLAG';
 const HIDE_SYNC_POPOVER = 'FEATUREGRID:HIDE_SYNC_POPOVER';
+const DOWNLOAD_IGRAC_DATA = 'FEATUREGRID:DOWNLOAD_IGRAC_DATA';
+const FINISH_DOWNLOADING_IGRAC_DATA = 'FEATUREGRID:FINISH_DOWNLOADING_IGRAC_DATA';
 
 const MODES = {
     EDIT: "EDIT",
@@ -337,6 +339,19 @@ function sizeChange(size, dockProps) {
         dockProps
     };
 }
+
+function finishDownloadingIGRACData() {
+    return {
+        type: FINISH_DOWNLOADING_IGRAC_DATA
+    };
+}
+
+function downloadIGRACData() {
+    return {
+        type: DOWNLOAD_IGRAC_DATA
+    };
+}
+
 const moreFeatures = (pages) => {
     return {
         type: LOAD_MORE_FEATURES,
@@ -402,6 +417,8 @@ module.exports = {
     ZOOM_ALL, zoomAll,
     UPDATE_FILTER, updateFilter,
     SIZE_CHANGE, sizeChange,
+    DOWNLOAD_IGRAC_DATA, downloadIGRACData,
+    FINISH_DOWNLOADING_IGRAC_DATA, finishDownloadingIGRACData,
     setLayer,
     selectFeatures,
     deselectFeatures,
