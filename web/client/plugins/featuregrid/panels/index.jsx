@@ -51,6 +51,7 @@ const Toolbar = connect(
         disableZoomAll: (state) => state && state.featuregrid.virtualScroll || featureCollectionResultSelector(state).features.length === 0,
         isSearchAllowed: (state) => !isCesium(state),
         isIGRACDownloading: (state) => state.featuregrid.isIGRACDownloading,
+        isIGRACDownloadAllowed: (state) => { return selectedLayerNameSelector(state).toLowerCase().includes('groundwater_well'); },
         isEditingAllowed: isEditingAllowedSelector,
         hasSupportedGeometry,
         isFilterActive,
