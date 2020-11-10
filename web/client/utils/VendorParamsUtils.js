@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 const FilterUtils = require('./FilterUtils');
+const ConfigUtils = require('./ConfigUtils');
 
 
 module.exports = {
@@ -33,9 +34,20 @@ module.exports = {
         } else {
             CQL_FILTER = cqlFilters.pop();
         }
-        return CQL_FILTER ? {
+        const cqlParams = CQL_FILTER ? {
             ...options.params,
             CQL_FILTER
         } : options.params;
+
+        const viewParamsLocalConfig = ConfigUtils.getConfigProp('viewparams');
+        if (viewParamsLocalConfig) {
+            const VIEWPARAMS = viewParamsLocalConfig;
+            return cqlParams ? {
+                ...cqlParams,
+                VIEWPARAMS
+            } : { 'VIEWPARAMS': VIEWPARAMS };
+        }
+
+        return cqlParams;
     }
 };
