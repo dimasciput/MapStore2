@@ -11,7 +11,7 @@ const {createSelector} = require('reselect');
 
 const {creationError, changeMapView, clickOnMap, mouseMove, mouseOut} = require('../../actions/map');
 const {removePopup} = require('../../actions/mapPopups');
-const {layerLoading, layerLoad, layerError} = require('../../actions/layers');
+const {layerLoading, layerLoad, layerError, browseData} = require('../../actions/layers');
 const {changeMeasurementState, changeGeometry, resetGeometry, updateMeasures, setTextLabels} = require('../../actions/measurement');
 const {measurementSelector} = require('../../selectors/measurement');
 const {changeSelectionState} = require('../../actions/selection');
@@ -40,6 +40,7 @@ module.exports = (mapType, actions) => {
         onLayerLoading: layerLoading,
         onLayerLoad: layerLoad,
         onLayerError: layerError,
+        onBrowseData: browseData,
         onWarning: warning,
         onMouseOut: mouseOut
     }, actions), (stateProps, dispatchProps, ownProps) => {

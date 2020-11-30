@@ -19,6 +19,7 @@ const {interceptOGCError} = require('../utils/ObservableUtils');
 const {getCapabilitiesUrl} = require('../utils/LayersUtils');
 const FilterUtils = require('../utils/FilterUtils');
 const requestBuilder = require('../utils/ogc/WFS/RequestBuilder');
+const ConfigUtils = require('../utils/ConfigUtils');
 const {getFeature, query, sortBy, propertyName} = requestBuilder({ wfsVersion: "1.1.0" });
 
 const toDescribeURL = ({ name, search = {}, url, describeFeatureTypeURL} = {}) => {
@@ -90,6 +91,10 @@ const getPagination = (filterObj = {}, options = {}) =>
  * @return {Observable} a stream that emits the GeoJSON or an error.
  */
 const getJSONFeature = (searchUrl, filterObj, options = {}) => {
+    const viewParamsLocalConfig = ConfigUtils.getConfigProp('viewparams');
+    if (viewParamsLocalConfig) {
+        options.viewParams = viewParamsLocalConfig;
+    }
     const data = FilterUtils.getWFSFilterData(filterObj, options);
 
     const urlParsedObj = Url.parse(searchUrl, true);
