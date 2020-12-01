@@ -189,7 +189,6 @@ const featuresToGrid = compose(
                 } catch (e) {
                 }
             }
-            console.log('COLUMNS', result);
             return result;
         }
     ),
