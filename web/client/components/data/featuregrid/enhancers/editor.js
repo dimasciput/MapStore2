@@ -1,5 +1,6 @@
 const {featureTypeToGridColumns, getToolColumns, getRow, getRowVirtual, getGridEvents, applyAllChanges, createNewAndEditingFilter} = require('../../../../utils/FeatureGridUtils');
 const EditorRegistry = require('../../../../utils/featuregrid/EditorRegistry');
+const ConfigUtils = require('../../../../utils/ConfigUtils');
 const {compose, withPropsOnChange, withHandlers, defaultProps, createEventHandler} = require('recompose');
 const {isNil} = require('lodash');
 const {getFilterRenderer} = require('../filterRenderers');
@@ -150,6 +151,31 @@ const featuresToGrid = compose(
                         getFormatter: (desc) => getFormatter(desc)
                     }))
             });
+            let layerAttributes = ConfigUtils.getConfigProp('layerattributes');
+            if (props.typeName) {
+                try {
+                    let _layerAttributes = layerAttributes[props.typeName];
+                    if (_layerAttributes) {
+                        _layerAttributes.forEach((_attribute, index) => {
+                            result.columns.forEach((_column, columnIndex) => {
+                                if (_column.name === _attribute.attribute) {
+                                    if (!_attribute.visible) {
+                                        // Remove column
+                                        result.columns.splice(columnIndex, 1);
+                                    } else {
+                                        result.columns[columnIndex].name = _attribute.attribute_label;
+                                        result.columns[columnIndex].order = _attribute.display_order;
+                                    }
+                                } else if (_column.name === '') {
+                                    result.columns.splice(columnIndex, 1);
+                                }
+                            });
+                        });
+                        result.columns.sort((a, b) => (a.order > b.order) ? 1 : -1);
+                    }
+                } catch (e) {
+                }
+            }
             return result;
         }
     ),
