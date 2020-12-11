@@ -202,7 +202,12 @@ const zoomToExtentEpic = (action$, {getState = () => {} }) =>
             return Rx.Observable.empty();
         }
         const hook = MapUtils.getHook(MapUtils.ZOOM_TO_EXTENT_HOOK);
-        const padding = mapPaddingSelector(getState());
+        let padding = {};
+        if (action.padding) {
+            padding = action.padding;
+        } else {
+            padding = mapPaddingSelector(getState());
+        }
         if (hook) {
             const { crs, maxZoom } = action;
             hook(extent, {
