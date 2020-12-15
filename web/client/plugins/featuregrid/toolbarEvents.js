@@ -14,7 +14,9 @@ import {
     startDrawingFeature,
     deleteGeometry,
     openAdvancedSearch,
-    zoomAll
+    zoomAll,
+    downloadIGRACData,
+    finishDownloadingIGRACData
 } from '../../actions/featuregrid';
 
 import { createChart } from '../../actions/widgets';
@@ -39,5 +41,7 @@ export default {
     setTimeSync,
     hideSyncPopover: () => hideSyncPopover(),
     toggleShowAgain: () => toggleShowAgain(),
-    chart: () => createChart()
+    chart: () => createChart(),
+    downloadIGRACData: () => downloadIGRACData(),
+    finishDownloadingIGRACData: () => finishDownloadingIGRACData()
 };

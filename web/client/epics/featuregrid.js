@@ -131,7 +131,11 @@ import {
     getAttributeFilters,
     selectedLayerSelector,
     multiSelect,
-    paginationSelector
+    paginationSelector,
+    DOWNLOAD_IGRAC_DATA,
+    downloadIGRACData,
+    FINISH_DOWNLOADING_IGRAC_DATA,
+    finishDownloadingIGRACData
 } from '../selectors/featuregrid';
 
 import { error, warning } from '../actions/notifications';
@@ -1177,3 +1181,40 @@ export const hideDrawerOnFeatureGridOpenMobile = (action$, { getState } = {}) =>
             && drawerEnabledControlSelector(getState())
         )
         .mapTo(toggleControl('drawer', 'enabled'));
+export const startDownloadingIGRACData = (action$, { getState } = {}) =>
+        action$
+            .ofType(DOWNLOAD_IGRAC_DATA)
+            .switchMap(() => {
+                let data = null;
+                let maxTry = 10;
+                let currentTry = 0;
+                let downloadUrl = '/groundwater/well/download/';
+                const { id } = selectedLayerSelector(getState());
+                const filterObj = get(getState(), `featuregrid.advancedFilters["${id}"]`);
+                const filters = get(getState(), `featuregrid.filters["${id}"]`);
+
+                return Rx.Observable.fromPromise(axios.get(downloadUrl).then( response => response.data.task_id )).flatMap(
+                    taskId => Rx.Observable.interval(2000).flatMap(
+                        () => {
+                            const fileUrl = `/uploaded/gwml2/download/${taskId}.zip`;
+                            return axios.get(fileUrl).then(
+                                function(response) {
+                                    data = 'OK';
+                                    const link = document.createElement('a');
+                                    link.href = fileUrl;
+                                    // Append to html link element page
+                                    document.body.appendChild(link);
+                                    // Start download
+                                    link.click();
+                                    // Clean up and remove the link
+                                    link.parentNode.removeChild(link);
+                                    return data;
+                                }).catch(
+                                function(e) {
+                                    data = null;
+                                    currentTry += 1;
+                                    return null;
+                                });
+                        }).filter(() => data !== null || currentTry > maxTry).take(1).switchMap(() => Rx.Observable.of(finishDownloadingIGRACData()))
+                );
+            });

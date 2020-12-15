@@ -16,12 +16,12 @@ const hideStyle = {
 };
 const normalStyle = {};
 const getStyle = (visible) => visible ? normalStyle : hideStyle;
-export const SimpleTButton = forwardRef(({ disabled, id, visible, onClick, glyph, active, className = "square-button", ...props }, ref) => {
+export const SimpleTButton = forwardRef(({ disabled, id, visible, onClick, glyph, active, loading = false, className = "square-button", ...props }, ref) => {
     return (<Button ref={ref} {...props} bsStyle={active ? "success" : "primary"} disabled={disabled} id={`fg-${id}`}
         style={getStyle(visible)}
         className={className}
         onClick={() => !disabled && onClick()}>
-        <Glyphicon glyph={glyph} />
+        {loading ? <div className="toc-inline-loader"></div> : <Glyphicon glyph={glyph}/>}
     </Button>);
 });
 

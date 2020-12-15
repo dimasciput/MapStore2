@@ -91,6 +91,7 @@ const Toolbar = connect(
         isColumnsOpen: state => state && state.featuregrid && state.featuregrid.tools && state.featuregrid.tools.settings,
         disableZoomAll: (state) => state && state.featuregrid.virtualScroll || featureCollectionResultSelector(state).features.length === 0,
         isSearchAllowed: (state) => !isCesium(state),
+        isIGRACDownloading: (state) => state.featuregrid.isIGRACDownloading,
         isEditingAllowed: isEditingAllowedSelector,
         hasSupportedGeometry,
         isFilterActive,

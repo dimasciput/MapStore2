@@ -47,7 +47,9 @@ import {
     SET_UP,
     SET_TIME_SYNC,
     UPDATE_EDITORS_OPTIONS,
-    SET_PAGINATION
+    SET_PAGINATION,
+    DOWNLOAD_IGRAC_DATA,
+    FINISH_DOWNLOADING_IGRAC_DATA
 } from '../actions/featuregrid';
 
 import { FEATURE_TYPE_LOADED, QUERY_CREATE } from '../actions/wfsquery';
@@ -428,6 +430,16 @@ function featuregrid(state = emptyResultsState, action) {
     }
     case SET_TIME_SYNC: {
         return assign({}, state, {timeSync: action.value});
+    }
+    case DOWNLOAD_IGRAC_DATA: {
+        return assign({}, state, {
+            isIGRACDownloading: true
+        });
+    }
+    case FINISH_DOWNLOADING_IGRAC_DATA: {
+        return assign({}, state, {
+            isIGRACDownloading: false
+        });
     }
     default:
         return state;
