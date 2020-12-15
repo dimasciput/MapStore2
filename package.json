@@ -185,6 +185,7 @@
     "prop-types": "15.7.2",
     "qrcode.react": "0.9.3",
     "query-string": "6.9.0",
+    "rbush": "^2.0.1",
     "react": "16.10.1",
     "react-addons-css-transition-group": "15.6.2",
     "react-addons-shallow-compare": "15.6.2",
