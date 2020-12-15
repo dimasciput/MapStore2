@@ -12,7 +12,7 @@ import { createSelector } from 'reselect';
 import { changeMapView, clickOnMap, mouseMove, mouseOut } from '../../actions/map';
 import { boxEnd } from '../../actions/box';
 import { removePopup } from '../../actions/mapPopups';
-import { layerLoading, layerLoad, layerError } from '../../actions/layers';
+import { layerLoading, layerLoad, layerError, browseData } from '../../actions/layers';
 
 import {
     changeMeasurementState,
@@ -65,6 +65,7 @@ const pluginsCreator = (mapType, actions) => {
             onLayerLoading: layerLoading,
             onLayerLoad: layerLoad,
             onLayerError: layerError,
+            onBrowseData: browseData,
             onWarning: warning,
             onMouseOut: mouseOut
         }, actions), (stateProps, dispatchProps, ownProps) => {
