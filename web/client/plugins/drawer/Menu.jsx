@@ -34,6 +34,7 @@ class Menu extends React.Component {
     };
 
     static defaultProps = {
+        show: true,
         docked: false,
         single: false,
         width: 300,
