@@ -1189,11 +1189,8 @@ export const startDownloadingIGRACData = (action$, { getState } = {}) =>
                 let maxTry = 10;
                 let currentTry = 0;
                 let downloadUrl = '/groundwater/well/download/';
-                const { id } = selectedLayerSelector(getState());
-                const filterObj = get(getState(), `featuregrid.advancedFilters["${id}"]`);
-                const filters = get(getState(), `featuregrid.filters["${id}"]`);
-
-                return Rx.Observable.fromPromise(axios.get(downloadUrl).then( response => response.data.task_id )).flatMap(
+                const attributesFilter = getAttributeFilters(getState()) || {};
+                return Rx.Observable.fromPromise(axios.post(downloadUrl, attributesFilter).then( response => response.data.task_id )).flatMap(
                     taskId => Rx.Observable.interval(2000).flatMap(
                         () => {
                             const fileUrl = `/uploaded/gwml2/download/${taskId}.zip`;
