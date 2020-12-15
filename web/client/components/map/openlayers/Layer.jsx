@@ -9,6 +9,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Layers from '../../../utils/openlayers/Layers';
+import { getConfigProp, setConfigProp } from "../../../utils/ConfigUtils";
 import {normalizeSRS, reprojectBbox, getExtentFromNormalized, isBboxCompatible, getPolygonFromExtent} from '../../../utils/CoordinatesUtils';
 import assign from 'object-assign';
 import Rx from 'rxjs';
@@ -216,7 +217,19 @@ export default class OpenlayersLayer extends React.Component {
                     this.props.onLayerLoading(options.id);
                     // IGRAC ONLY
                     if (options.id.toLowerCase().includes('groundwater_well')) {
-                        this.props.onBrowseData(options);
+                        let browseDataOpened = getConfigProp('browseDataOpened');
+                        if (!browseDataOpened) {
+                            setConfigProp('browseDataOpened', true);
+                            let layerOptions = {
+                                url: options.url,
+                                id: options.id,
+                                name: options.name
+                            };
+                            let that = this;
+                            setTimeout(function() {
+                                that.props.onBrowseData(layerOptions);
+                            }, 1000);
+                        }
                     }
                     this.tilestoload++;
                 } else {
