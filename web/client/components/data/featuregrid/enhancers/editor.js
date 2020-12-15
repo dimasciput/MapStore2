@@ -27,6 +27,12 @@ import { getFilterRenderer } from '../filterRenderers';
 import { getFormatter } from '../formatters';
 import { getConfigProp } from "../../../../utils/ConfigUtils";
 
+class HTMLCellFormatter extends React.Component {
+    render() {
+        return <div dangerouslySetInnerHTML={{ __html: this.props.value }} />;
+    }
+}
+
 const loadMoreFeaturesStream = $props => {
     return $props
         .distinctUntilChanged(({features: oF, pages: oPages, isFocused: oFocused}, {features: nF, pages: nPages, isFocused: nFocused}) => oF === nF && oFocused === nFocused && oPages === nPages)
@@ -105,17 +111,19 @@ const featuresToGrid = compose(
     ),
     withPropsOnChange(
         ["features", "newFeatures", "changes"],
-        props => ({
-            rows: (props.newFeatures ? [...props.newFeatures, ...props.features] : props.features)
-                .filter(props.focusOnEdit ? createNewAndEditingFilter(props.changes && Object.keys(props.changes).length > 0, props.newFeatures, props.changes) : () => true)
-                .map(orig => applyAllChanges(orig, props.changes)).map(result =>
-                    ({...result,
-                        get: key => {
-                            return (key === "id" || key === "geometry" || key === "_new") ? result[key] : result.properties && result.properties[key];
-                        }
-                    }))
-        })
-    ),
+        props => {
+            const rowsResult = ({
+                rows: (props.newFeatures ? [...props.newFeatures, ...props.features] : props.features)
+                    .filter(props.focusOnEdit ? createNewAndEditingFilter(props.changes && Object.keys(props.changes).length > 0, props.newFeatures, props.changes) : () => true)
+                    .map(orig => applyAllChanges(orig, props.changes)).map(result =>
+                        ({...result,
+                            get: key => {
+                                return (key === "id" || key === "geometry" || key === "_new") ? result[key] : result.properties && result.properties[key];
+                            }
+                        }))
+            });
+            return rowsResult;
+        }),
     withPropsOnChange(
         ["newFeatures", "changes", "focusOnEdit"],
         props => ({
@@ -184,6 +192,10 @@ const featuresToGrid = compose(
                                     } else {
                                         result.columns[columnIndex].name = _attribute.attribute_label;
                                         result.columns[columnIndex].order = _attribute.display_order;
+                                        result.columns[columnIndex].attribute_type = _attribute.attribute_type;
+                                        if (_attribute.attribute_type === 'html') {
+                                            result.columns[columnIndex].formatter = HTMLCellFormatter;
+                                        }
                                     }
                                 } else if (_column.name === '') {
                                     result.columns.splice(columnIndex, 1);
