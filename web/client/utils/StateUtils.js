@@ -157,7 +157,7 @@ export const createStore = ({
     epics = {},
     state = {},
     middlewares = [],
-    debug = true,
+    debug = false,
     enhancer
 } = {}) => {
     const reducer = persistReducer(rootReducer || combineReducers(reducers));
