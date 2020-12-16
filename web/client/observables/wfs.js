@@ -89,10 +89,6 @@ export const getPagination = (filterObj = {}, options = {}) =>
  * @return {Observable} a stream that emits the GeoJSON or an error.
  */
 export const getJSONFeature = (searchUrl, filterObj, options = {}) => {
-    const viewParamsLocalConfig = getConfigProp('viewparams');
-    if (viewParamsLocalConfig) {
-        options.viewParams = viewParamsLocalConfig;
-    }
     const data = getWFSFilterData(filterObj, options);
 
     const urlParsedObj = urlUtil.parse(searchUrl, true);

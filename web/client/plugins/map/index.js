@@ -65,7 +65,6 @@ const pluginsCreator = (mapType, actions) => {
             onLayerLoading: layerLoading,
             onLayerLoad: layerLoad,
             onLayerError: layerError,
-            onBrowseData: browseData,
             onWarning: warning,
             onMouseOut: mouseOut
         }, actions), (stateProps, dispatchProps, ownProps) => {

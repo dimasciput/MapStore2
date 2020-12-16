@@ -32,19 +32,8 @@ export const optionsToVendorParams = (options = {}, extraCQLFilter = null) => {
     } else {
         CQL_FILTER = cqlFilters.pop();
     }
-    const cqlParams = CQL_FILTER ? {
+    return CQL_FILTER ? {
         ...options.params,
         CQL_FILTER
     } : options.params;
-
-    const viewParamsLocalConfig = getConfigProp('viewparams');
-    if (viewParamsLocalConfig) {
-        const VIEWPARAMS = viewParamsLocalConfig;
-        return cqlParams ? {
-            ...cqlParams,
-            VIEWPARAMS
-        } : { 'VIEWPARAMS': VIEWPARAMS };
-    }
-
-    return cqlParams;
 };

@@ -31,7 +31,6 @@ export default class OpenlayersLayer extends React.Component {
         onLayerError: PropTypes.func,
         onCreationError: PropTypes.func,
         onLayerLoad: PropTypes.func,
-        onBrowseData: PropTypes.func,
         position: PropTypes.number,
         observables: PropTypes.array,
         securityToken: PropTypes.string,
@@ -42,7 +41,6 @@ export default class OpenlayersLayer extends React.Component {
         observables: [],
         onLayerLoading: () => {},
         onLayerLoad: () => {},
-        onBrowseData: () => {},
         onLayerError: () => {},
         onCreationError: () => {},
         onWarning: () => {},
@@ -215,22 +213,6 @@ export default class OpenlayersLayer extends React.Component {
             this.layer.getSource().on('tileloadstart', () => {
                 if (this.tilestoload === 0) {
                     this.props.onLayerLoading(options.id);
-                    // IGRAC ONLY
-                    if (options.id.toLowerCase().includes('groundwater_well')) {
-                        let browseDataOpened = getConfigProp('browseDataOpened');
-                        if (!browseDataOpened) {
-                            setConfigProp('browseDataOpened', true);
-                            let layerOptions = {
-                                url: options.url,
-                                id: options.id,
-                                name: options.name
-                            };
-                            let that = this;
-                            setTimeout(function() {
-                                that.props.onBrowseData(layerOptions);
-                            }, 1000);
-                        }
-                    }
                     this.tilestoload++;
                 } else {
                     this.tilestoload++;

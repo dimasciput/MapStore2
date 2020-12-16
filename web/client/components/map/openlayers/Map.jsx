@@ -55,7 +55,6 @@ class OpenlayersMap extends React.Component {
         onMouseMove: PropTypes.func,
         onLayerLoading: PropTypes.func,
         onLayerLoad: PropTypes.func,
-        onBrowseData: PropTypes.func,
         onLayerError: PropTypes.func,
         resize: PropTypes.number,
         measurement: PropTypes.object,
@@ -83,7 +82,6 @@ class OpenlayersMap extends React.Component {
         projection: 'EPSG:3857',
         projectionDefs: [],
         onLayerLoading: () => { },
-        onBrowseData: () => { },
         onLayerLoad: () => { },
         onLayerError: () => { },
         resize: 0,
@@ -456,7 +454,6 @@ class OpenlayersMap extends React.Component {
                 onLayerLoading: this.props.onLayerLoading,
                 onLayerError: this.props.onLayerError,
                 onLayerLoad: this.props.onLayerLoad,
-                onBrowseData: this.props.onBrowseData,
                 projection: this.props.projection,
                 onCreationError: this.props.onCreationError
             }) : null;
