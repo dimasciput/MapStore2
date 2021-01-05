@@ -279,7 +279,7 @@
             },
             "FeedbackMask"
         ],
-        "desktop": ["Details",
+        "desktop": ["GeonodeMetadata","Details",
           {
             "name": "Map",
             "cfg": {
@@ -310,39 +310,7 @@
             "cfg": {
               "measurementAnnotationEdit": false
             }
-          },
-            {
-              "name": "Share",
-              "cfg": {
-                "advancedSettings": {
-                  "bbox": true,
-                  "centerAndZoom": true
-                }
-              }
-            },
-            {
-                "name": "Identify",
-                "cfg": {
-                    "showHighlightFeatureButton": true,
-                    "viewerOptions": {
-                        "container": "{context.ReactSwipe}"
-                    },
-                    "showEdit": true
-                },
-                "override": {
-                  "Toolbar": {
-                    "position": 11
-                  }
-                }
-            },
-            {
-                "name": "Locate",
-                "override": {
-                    "Toolbar": {
-                        "alwaysVisible": true
-                    }
-                }
-            }, "Home", "FeatureEditor",
+          }, "Home", "FeatureEditor",
             "LayerDownload",
             "ExportDataResults",
             {
