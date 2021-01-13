@@ -58,7 +58,9 @@ export default ({
     showSyncOnMapButton = true,
     showTimeSyncButton = false,
     syncPopover = { showPopoverSync: true, dockSize: "32.2%" }, mode = "VIEW",
-    timeSync = false
+    timeSync = false,
+    isIGRACDownloading = false,
+    isIGRACDownloadAllowed = false
 } = {}) => {
     return (<ButtonGroup id="featuregrid-toolbar" className="featuregrid-toolbar featuregrid-toolbar-margin">
         <TButton
@@ -216,6 +218,15 @@ export default ({
             active={timeSync}
             onClick={() => events.setTimeSync && events.setTimeSync(!timeSync)}
             glyph="time" />
-
+        <TButton
+            id="grid-igrac-download"
+            keyProp="grid-igrac-download"
+            tooltipId="featuregrid.toolbar.downloadIGRACData"
+            disabled={isIGRACDownloading}
+            active={!isIGRACDownloading}
+            visible={selectedCount <= 1 && mode === "VIEW" && isIGRACDownloadAllowed}
+            onClick={events.downloadIGRACData}
+            loading={isIGRACDownloading}
+            glyph="features-grid-download"/>
     </ButtonGroup>);
 };

@@ -131,7 +131,7 @@ import {
     getAttributeFilters,
     selectedLayerSelector,
     multiSelect,
-    paginationSelector
+    paginationSelector,
 } from '../selectors/featuregrid';
 
 import { error, warning } from '../actions/notifications';

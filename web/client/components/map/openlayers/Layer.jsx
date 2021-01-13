@@ -9,6 +9,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Layers from '../../../utils/openlayers/Layers';
+import { getConfigProp, setConfigProp } from "../../../utils/ConfigUtils";
 import {normalizeSRS, reprojectBbox, getExtentFromNormalized, isBboxCompatible, getPolygonFromExtent} from '../../../utils/CoordinatesUtils';
 import assign from 'object-assign';
 import Rx from 'rxjs';

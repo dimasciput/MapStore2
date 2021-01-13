@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import {isFilterValid, toCQLFilter} from './FilterUtils';
+import { getConfigProp } from './ConfigUtils';
 
 /**
      * Check layer options to manipulate and manage vendor params in case of GeoServer usage.
