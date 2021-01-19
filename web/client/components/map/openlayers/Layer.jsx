@@ -140,6 +140,18 @@ export default class OpenlayersLayer extends React.Component {
         if (type) {
             const layerOptions = this.generateOpts(options, position, normalizeSRS(this.props.srs), securityToken, env);
             this.layer = Layers.createLayer(type, layerOptions, this.props.map, this.props.mapId);
+
+            // IGRAC changes
+            if (this.layer) {
+                const layerSource = this.layer.getSource();
+                layerSource.wrapX = false
+                if (typeof layerSource.wrapX_ !== "undefined") {
+                    layerSource.wrapX_ = false
+                }
+                this.layer.setSource(layerSource)
+            }
+            // End of IGRAC changes
+
             const compatible = Layers.isCompatible(type, layerOptions);
             if (this.layer && !this.layer.detached) {
                 const parentMap = this.props.map;
