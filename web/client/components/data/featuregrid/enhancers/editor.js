@@ -181,6 +181,7 @@ const featuresToGrid = compose(
             });
             let layerAttributes = getConfigProp('layerattributes');
             if (props.typeName) {
+                let geometryAttribute = null;
                 try {
                     let _layerAttributes = layerAttributes[props.typeName];
                     if (_layerAttributes) {
@@ -198,12 +199,16 @@ const featuresToGrid = compose(
                                             result.columns[columnIndex].formatter = HTMLCellFormatter;
                                         }
                                     }
-                                } else if (_column.name === '') {
+                                } else if (_column.key === 'geometry') {
+                                    geometryAttribute = result.columns[columnIndex]
                                     result.columns.splice(columnIndex, 1);
                                 }
                             });
                         });
                         result.columns.sort((a, b) => (a.order > b.order) ? 1 : -1);
+                        if (geometryAttribute) {
+                            result.columns.unshift(geometryAttribute)
+                        }
                     }
                 } catch (e) {
                 }
